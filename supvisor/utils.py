@@ -66,10 +66,17 @@ class File:
         f = open(self.confFile + self.fileName, 'w')
         f.write(text)
         f.close()
+
     def delete(self):
         cmnd = ['/bin/rm', '-rf', self.confFile+self.fileName]
         p = subprocess.call(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         time.sleep(1)
+
+    def get_created(self):
+        return time.ctime(os.path.getctime(self.confFile+self.fileName))
+
+    def get_last_modified(self):
+        return time.ctime(os.path.getmtime(self.confFile+self.fileName))
 
 ###########################################################################################
 #                                                                                         #

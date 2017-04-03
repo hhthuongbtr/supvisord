@@ -15,8 +15,14 @@ from log.views import *
 from accounts.user_info import *
 import time
 import os, sys, subprocess, shlex, re, fnmatch,signal
+import os.path
 from subprocess import call
 
+"""
+import os.path, time
+print("last modified: %s" % time.ctime(os.path.getmtime(file)))
+print("created: %s" %       time.ctime(os.path.getctime(file)))
+"""
 @csrf_exempt
 def supvisor(request):
 	if not request.user.is_authenticated():
@@ -37,12 +43,16 @@ def supvisor_json(request):
 						'state'				: 10+Process(job).get_job_status() if job.startswith("rtmp") else Process(job).get_job_status(),
 						'description'		: Process(job).job_status() if job else None,
 						'command'			: File(job).get_command() if job else None,
+						#'dcreate'			: File(job).get_created() if job else '',
+						'dmodified'			: File(job).get_last_modified() if job else '',
 						})
 		elif job.startswith(request.user.username):
 			args.append({'name'				: job if job else None,
 						'state'				: Process(job).get_job_status() if job else None,
 						'description'		: Process(job).job_status() if job else None,
 						'command'			: File(job).get_command() if job else None,
+						#'dcreate'			: File(job).get_created() if job else '',
+						'dmodify'			: File(job).get_last_modified() if job else '',
 						})
 	json_data = json.dumps({"process": args})
 	return HttpResponse(json_data, content_type='application/json', status=200)
