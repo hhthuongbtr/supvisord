@@ -201,13 +201,20 @@ def rtmp_add_process(request):
 		msg= " user: "+request.user.username+" add process "+name 
 		write_log(request.user.username,"add", msg)
 		if 'saveAndStart' in request.POST:
-			RTMP(name).save(ip, encode, domain)
+			rtmp_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:30120")
+			aa = re.findall(rtmp_pattern, ip)
+			if aa:
+				RTMP(name).save_udp(ip, encode, domain)
+			else:
+				RTMP(name).save_rtmp(ip, encode, domain)
+
 			if Process(name).get_job_status() == 1:
 				Process(name).stop_job()
 			Process(name).update_job()
 			Process(name).start_job()
 			msg= " user: "+request.user.username+" start process "+name 
 			write_log(request.user.username,"start", msg)
+
 		elif 'saveOnly' in request.POST:
 			RTMP(name).save(ip, encode, domain)
 			Process(name).update_job()
@@ -233,6 +240,30 @@ def rtmp_add_json(request):
 def rtmp_start_job(request, name):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
+	else:
+		Process(name).update_job()
+		Process(name).start_job()
+		msg= " user: "+request.user.username+" start process "+name 
+		write_log(request.user.username,"start", msg)
+	return HttpResponseRedirect('/supvisor/')
+
+@csrf_exempt
+def rtmp_restart_job(request, name):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
+	else:
+		if Process(name).get_job_status() == 1:
+			Process(name).stop_job()
+		Process(name).update_job()
+		Process(name).start_job()
+		msg= " user: "+request.user.username+" restart process "+name 
+		write_log(request.user.username,"restart", msg)
+	return HttpResponseRedirect('/supvisor/')
+
+@csrf_exempt
+def rtmp_edit_job(request, name):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
 	if request.method == 'POST':
 		if 'saveAndStart' in request.POST:
 			#Get new infor from template
@@ -243,10 +274,17 @@ def rtmp_start_job(request, name):
 			ip = request.POST.get('ip', '').strip()	
 			print ip
 			#check infor is change
-			if RTMP(name).get_ip()==ip and RTMP(name).get_encode()==encode and RTMP(name).get_domain()==domain:
+			if RTMP(name).get_source()==ip and RTMP(name).get_encode()==encode and RTMP(name).get_destination()==domain:
 				Process(name).restart_job()
 				return HttpResponseRedirect('/supvisor/')
-			RTMP(name).save(ip, encode, domain)
+
+			rtmp_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:30120")
+			aa = re.findall(rtmp_pattern, ip)
+			if aa:
+				RTMP(name).save_udp(ip, encode, domain)
+			else:
+				RTMP(name).save_rtmp(ip, encode, domain)
+
 			if Process(name).get_job_status() == 1:
 				Process(name).stop_job()
 			Process(name).update_job()
@@ -258,7 +296,7 @@ def rtmp_start_job(request, name):
 		user = user_info(request)
 		args={}
 		args['name'] = name
-		args['ip'] = RTMP(name).get_ip()
-		args['domain'] = RTMP(name).get_domain()
+		args['ip'] = RTMP(name).get_source()
+		args['domain'] = RTMP(name).get_destination()
 		args['encode'] = RTMP(name).get_encode()
-		return render_to_response('supvisor/rtmp/start.html', args)
+		return render_to_response('supvisor/rtmp/edit.html', args)

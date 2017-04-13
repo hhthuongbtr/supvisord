@@ -12,8 +12,9 @@ urlpatterns = patterns('',
     url(r'^document/$', 'supvisor.views.document'),
     #RTMP
     url(r'^rtmp/add/$', 'supvisor.views.rtmp_add_process'),
+    url(r'^rtmp/edit/(?P<name>.+)/$', 'supvisor.views.rtmp_edit_job'),
     url(r'^rtmp/start/(?P<name>.+)/$', 'supvisor.views.rtmp_start_job'),
-    url(r'^rtmp/restart/(?P<name>.+)/$', 'supvisor.views.rtmp_start_job'),
+    url(r'^rtmp/restart/(?P<name>.+)/$', 'supvisor.views.rtmp_restart_job'),
     url(r'^rtmp/add/json$', 'supvisor.views.rtmp_add_json'),
 )
 

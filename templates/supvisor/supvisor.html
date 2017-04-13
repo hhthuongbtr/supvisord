@@ -70,6 +70,7 @@
                 <a ng-if="item.state == 11 " class="btn btn-warning btn-xs" href="/supvisor/rtmp/restart/{{'{{item.name}'}}}/"">Restart</a>
                 <a ng-if="item.state == 12 || item.state == 10" class="btn btn-success btn-xs" href="/supvisor/rtmp/start/{{'{{item.name}'}}}/">Start</a>
                 <a ng-if="item.state == 11 || item.state == 12" ng-hide="item.state == 12" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+                <a ng-if="item.state == 10 || item.state == 12" class="btn btn-warning btn-xs" href="/supvisor/rtmp/edit/{{'{{item.name}'}}}/">Edit</a>
                 <a ng-if="item.state == 10 || item.state == 12" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
                 <!--End RTMP -->
               </td>

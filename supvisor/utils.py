@@ -2,6 +2,7 @@ import json
 import os, sys, subprocess, shlex, re, fnmatch,signal
 from subprocess import call
 import time
+import re
 
 
 fileDir = '/etc/supervisord.d/supervisor.conf/'
@@ -77,6 +78,34 @@ class File:
 
     def get_last_modified(self):
         return time.ctime(os.path.getmtime(self.confFile+self.fileName))
+
+###########################################################################################
+#                                                                                         #
+#----------------------------------------REGEX---------------------------------------------#
+#                                                                                         #
+###########################################################################################
+class Regex:
+    def __init__(self, str):
+        self.str = str
+    def get_ip_multicast(self):
+        udp_pattern=re.compile("udp://\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:\d{2,5}")
+        aa = re.findall(udp_pattern, self.str)
+        if aa:
+            return aa[0]
+        else:
+            return None
+
+    def get_link(self):
+        rtmp_pattern=re.compile("rtmp://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
+        aa = re.findall(rtmp_pattern, self.str)
+        if aa:
+            if len(aa) == 2:
+                return (aa[0], aa[1])
+            else:
+                return aa[0]
+        else:
+            return None
+
 
 ###########################################################################################
 #                                                                                         #
@@ -269,7 +298,6 @@ class Process:
 #End class
 
 
-
 ###########################################################################################
 #                                                                                         #
 #----------------------------------------RTMP---------------------------------------------#
@@ -289,20 +317,34 @@ class RTMP:
         self.keySearchDomain = 'rtmp://'
         self.endKeySearchDomain = '\n'
 
-    def get_ip(self):
+    def get_source(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.keySearchIP) + len(self.keySearchIP) : command.find(self.endKeySearchIP, command.find(self.keySearchIP))]
+        ip = Regex(command).get_ip_multicast()
+        if ip:
+            return ip.replace('udp://','')
+        else:
+            source, destination = Regex(command).get_link()
+            return source.replace('rtmp://','')
 
-    def get_domain(self):
+
+    def get_destination(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.keySearchDomain) + len(self.keySearchDomain) : command.find(self.endKeySearchDomain)]
+        if len(Regex(command).get_link()) == 2:
+            source, destination = Regex(command).get_link()
+            return destination.replace('rtmp://','')
+        else:
+            destination = Regex(command).get_link()
+            return destination.replace('rtmp://','')
+
     def get_encode(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.secondKeySearchEncode, command.find(self.fristkeySearchEncode))+1 : command.find(self.endKeySearchEncode)]
+        source = self.get_source()
+        destination = self.get_destination()
+        return command[command.find(source)+len(source) + 1 : command.find(destination) - len('rtmp:// ')]
 
-    def save(self, ip, encode, domain):
+    def save_udp(self, ip, encode, domain):
         #read template supervisord config
-        text=File('rtmp.template').read_template()
+        text=File('rtmp.udp.template').read_template()
         #read config rtmp template as json data
         configString =  File("rtmp.json.template").read_template()
         #Convert to json data
@@ -318,3 +360,23 @@ class RTMP:
         #edit stream key
         text=text.replace('[domain]', domain)
         File(self.fileName).write_conf_file(text)
+
+    def save_rtmp(self, ip, encode, domain):
+        #read template supervisord config
+        text=File('rtmp.rtmp.template').read_template()
+        #read config rtmp template as json data
+        configString =  File("rtmp.json.template").read_template()
+        #Convert to json data
+        data = json.loads(configString)
+        #edit encode
+        text=text.replace('[encode]', encode)
+        #edit name
+        text=text.replace('[name]', self.fileName)
+        #edit binary system name
+        text=text.replace('[binary_system]', data["binary_system"])
+        #edit ip
+        text=text.replace('[ip]', ip)
+        #edit stream key
+        text=text.replace('[domain]', domain)
+        File(self.fileName).write_conf_file(text)
+
