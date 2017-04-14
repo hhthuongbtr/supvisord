@@ -216,7 +216,14 @@ def rtmp_add_process(request):
 			write_log(request.user.username,"start", msg)
 
 		elif 'saveOnly' in request.POST:
-			RTMP(name).save(ip, encode, domain)
+			'''Save command'''
+			rtmp_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:30120")
+			aa = re.findall(rtmp_pattern, ip)
+			if aa:
+				RTMP(name).save_udp(ip, encode, domain)
+			else:
+				RTMP(name).save_rtmp(ip, encode, domain)
+			'''End save command'''
 			Process(name).update_job()
 			Process(name).stop_job()
 		return HttpResponseRedirect('/supvisor/')
@@ -277,13 +284,14 @@ def rtmp_edit_job(request, name):
 			if RTMP(name).get_source()==ip and RTMP(name).get_encode()==encode and RTMP(name).get_destination()==domain:
 				Process(name).restart_job()
 				return HttpResponseRedirect('/supvisor/')
-
+			'''Save command'''
 			rtmp_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:30120")
 			aa = re.findall(rtmp_pattern, ip)
 			if aa:
 				RTMP(name).save_udp(ip, encode, domain)
 			else:
 				RTMP(name).save_rtmp(ip, encode, domain)
+			'''End save command'''
 
 			if Process(name).get_job_status() == 1:
 				Process(name).stop_job()
