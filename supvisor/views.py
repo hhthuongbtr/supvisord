@@ -167,3 +167,28 @@ def document(request):
 		return HttpResponseRedirect('/accounts/login')
 	user = user_info(request)
 	return render_to_response('supvisor/document.html', user)
+
+#RTMP
+@csrf_exempt
+def rtmp_add_process(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
+	if request.method == 'POST':
+		if 'saveAndStart' in request.POST:
+			#Get new infor from template
+			domain = request.POST.get('domain', '').strip()
+			ip = request.POST.get('ip', '').strip()
+			#Return deffault ip if new ip is none
+			if not ip:
+				ip = '225.1.1.7:30120'
+			name = request.POST.get('name', '').strip()
+			#Cut white space
+			name = name.replace(" ", "")
+			#End get new infor from template
+			RTMP(name).save(ip, domain)
+			if Process(name).get_job_status() == 1:
+				Process(name).stop_job()
+			Process(name).update_job()
+			Process(name).start_job()
+			return HttpResponseRedirect('/supvisor/')
+	return render_to_response('supvisor/rtmp/add.html')

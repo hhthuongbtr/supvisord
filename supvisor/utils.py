@@ -261,22 +261,36 @@ class Process:
 
 
 
-#TEST
-#job_status('event')
-#print get_job_status('event')
-#print get_service_status()
+###########################################################################################
+#                                                                                         #
+#----------------------------------------RTMP---------------------------------------------#
+#                                                                                         #
+###########################################################################################
+class RTMP:
+    def __init__(self, fileName):
+        if fileName.find(extention) > 0:
+            self.fileName = "rtmp_"+fileName
+        else:
+            self.fileName = "rtmp_"+fileName+extention
+        self.keySearchIP = 'udp://'
+        self.endKeySearchIP = ' -vcodec'
+        self.keySearchDomain = 'flv '
+        self.endKeySearchDomain = '\n'
 
+    def get_ip(self):
+        command=File(self.fileName).get_command()
+        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP)]
 
-"""fb = Facebook('test')
-print fb.fileName
-command = get_command('test.ini')
-print command
-print fb.get_ip()
-print fb.get_streamkey()
-fb.save('225.1.1.1:123', 'ddd')"""
+    def get_domain(self):
+        command=File(self.fileName).get_command()
+        return command[command.find(self.endKeySearchDomain) + len(self.keySearchDomain) : command.find(self.endKeySearchDomain)]
 
-"""yt = Youtube('youtube')
-print "ip:"+ yt.get_ip()
-print "streamkey:"+yt.get_streamkey()
-yt.save("225.1.1.0:333", "ddd")"""
-
+    def save(self, ip, domain):
+        text=File('rtmp.template').read_template()
+        #edit name
+        text=text.replace('[name]', self.fileName)
+        #edit ip
+        text=text.replace('[ip]',ip)
+        #edit stream key
+        text=text.replace('[domain]', domain)
+        File(self.fileName).write_conf_file(text)

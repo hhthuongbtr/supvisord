@@ -10,5 +10,7 @@ urlpatterns = patterns('',
     url(r'^add/$', 'supvisor.views.add_process'),
     url(r'^(?P<name>.+)/delete/$', 'supvisor.views.delete_process'),
     url(r'^document/$', 'supvisor.views.document'),
+    #RTMP
+    url(r'^rtmp/add/$', 'supvisor.views.rtmp_add_process'),
 )
 
