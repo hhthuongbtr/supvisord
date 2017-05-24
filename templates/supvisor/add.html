@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit info</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <link href="/static/css/signin.css" rel="stylesheet">
+    <script type="text/javascript">
+		function SubmitCheckTextField(){
+		    if (document.form.name.value == "") {
+		      alert ("Enter Name streaming!");
+		      return false;
+		    }
+		    else{
+		    	if (document.form.streamkey.value == ""){
+		    		alert ("Enter your Stream Key");
+		    		return false;
+		    	}
+		    }
+		  }
+    </script>
+</head>
+
+<body ng-app="myApp" ng-controller="processCtrl">
+  <div class="container">
+    <form class="well form-horizontal" action="/supvisor/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
+        {% csrf_token %}
+	<fieldset>
+
+	  <!-- Form Name -->
+	  <legend>
+		Add new process
+	  </legend>
+	  <!-- Event -->
+	   
+	  <div class="form-group"> 
+	    <label class="col-md-4 control-label">Stream type</label>
+	      <div class="col-md-4 selectContainer">
+	      <div class="input-group">
+	          <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+	      <select name="event" class="form-control selectpicker" >
+	      	<option>Facebook</option>
+	      	<option>Youtube</option>
+	      </select>
+	    </div>
+	  </div>
+	  </div>
+
+	  <!-- Name -->
+	   
+	  <div class="form-group"> 
+	    <label class="col-md-4 control-label">Name</label>
+	      <div class="col-md-4 selectContainer">
+	      <div class="input-group">
+	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+	          <input type="text" class="form-control" name="name" id="name" placeholder="Name of process">
+
+	      </select>
+	    </div>
+	  </div>
+	  </div>
+
+	  <!-- Stream key -->	    
+	  <div class="form-group">
+	    <label class="col-md-4 control-label">Steam Key:</label>
+	      <div class="col-md-4 inputGroupContainer">
+	      <div class="input-group">
+	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+	            <textarea class="form-control" name="command" id="streamkey" placeholder="Stream key">{{streamkey}}</textarea>
+	    </div>
+	    </div>
+	   </div>
+
+	  <!-- IP -->
+	  <div class="form-group">
+	    <label class="col-md-4 control-label">IP:Port</label>
+	      <div class="col-md-4 inputGroupContainer">
+	      <div class="input-group">
+	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+	            <input type="text" class="form-control" name="ip" placeholder="Default: 225.1.1.7:30120" value="{{ip}}">
+	    </div>
+	    </div>
+	  </div>
+
+	  <!-- Button -->
+	  <div class="form-group">
+	    <label class="col-md-5 control-label"></label>
+	    <div class="col-md-4">
+	      <button type="submit" class="btn btn-success" name="saveAndStart">Save and Start <span class="glyphicon glyphicon-save"></span></button>
+	    </div>
+	  </div>
+
+	  </fieldset>
+    </form>
+    </div>
+</body>
+</html>

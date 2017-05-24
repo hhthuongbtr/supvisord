@@ -1,0 +1,217 @@
+body, ol, ul, li{
+    margin: 0;
+    padding: 0;
+    font-family: Ubuntu, "times new roman", times, roman, serif;
+}
+
+li {
+    list-style-type: none;
+}
+
+a {
+    color: #0077CC;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+a:hover {
+    color: #3af;
+}
+
+select option {
+    display: block;
+}
+
+.header {
+    height: 80px;
+    padding: 17px 50px;    
+    background: #b7deed; /* Old browsers */
+    background: -moz-linear-gradient(-45deg,  #b7deed 0%, #71ceef 50%, #21b4e2 73%, #b7deed 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg,  #b7deed 0%,#71ceef 50%,#21b4e2 73%,#b7deed 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg,  #b7deed 0%,#71ceef 50%,#21b4e2 73%,#b7deed 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b7deed', endColorstr='#b7deed',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.header__title {
+    font-size: 28px;
+}
+
+.header__login-details {
+    float: right;
+    padding-top: 15px;  
+}
+
+.none {
+    display: none !important;
+}
+
+.main {
+    max-width: 1060px;
+    min-width: 640px;
+    min-height: 450px;
+    margin: 0 auto;
+    padding: 17px 13px 13px;
+    background: rgba(0,0,0,0.04);
+}
+
+.register-form-wrap .helptext {    
+    display:block;
+    clear: both;
+    font-size: smaller;
+    color: #333;
+}
+
+.register-form-wrap label {
+    display: inline-block;
+    float: left;
+    width: 260px;
+    margin-top: 4px;
+}
+
+.register-form-wrap input{
+    float: left;
+    margin-top: 4px;
+}
+
+.register-form-wrap label[for=id_password2] {
+    display: block;    
+    clear: both;
+}
+
+.register-form-wrap .submit {
+    margin-top: 8px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+.note-wrap .note-title {
+    font-size: 24px;
+    margin-bottom: 7px;
+	text-decoration: none;
+}
+
+.note-wrap .note-meta {
+    font-size: 0.8em;
+    color: #444;
+    margin-bottom: 7px;
+	text-decoration: none;
+}
+
+.note-wrap .note-meta .favorite-note {
+    color: #4CAF50;
+}
+
+.note-wrap .note-meta .note-meta-separator {
+    margin: 0 25px;
+}
+
+.note-wrap .note-meta .note-meta-category {
+    display: inline-block;
+    min-width: 76px;
+}
+
+.button {
+    display: inline-block;
+    color: #FFFFFF;    
+    background-color: #4CAF50;
+    vertical-align: middle;
+    overflow: hidden;
+    padding: 4px 8px;
+    text-decoration: none !important;       
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    margin-right: 6px;
+}
+
+.button:hover {
+    transition: background-color .15s, color .15s, box-shadow .15s, opacity 0.15s;
+    background-color: #ffffff;
+    color: #4CAF50;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 3px 10px 0 rgba(0,0,0,0.19);
+}
+
+.button.add-item-button {        
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    border: none;
+    display: inline-block;
+    outline: 0;
+    padding: 6px 16px;
+    margin-bottom: 9px;
+}
+
+.button.delete-button {
+    background-color: #FF5731;
+}
+.button.delete-button:hover {
+    background-color: #ffffff;
+    color: #FF5731;
+}
+
+.button.load-more {
+    margin-top: 20px;
+    padding: 4px 36px;
+}
+
+.add-edit-form li {
+    display: block;
+    margin: 2px 12px 12px 4px;    
+    vertical-align: middle;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.add-edit-form li > * {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.add-edit-form label {    
+    width: 180px;
+}
+
+.add-edit-form textarea {
+    min-width: 300px;
+    width: 400px;
+}
+
+.add-edit-form input[type='text'] {
+    min-width: 300px;
+    width: 100%;
+}
+
+.add-edit-form.note-wrap {
+    min-width: 460px;
+}
+
+.add-edit-form .errorlist {
+    display: block;
+    margin-left: 180px;
+    font-size: 0.7em;
+    color: #FF5731;
+}
+
+.add-edit-form .error {
+    color: #FF5731;
+}
+
+.listitem-edit-button {
+    display: block;
+    float: right;
+    margin-left: 43px;
+    color: #0077CC;
+    color: #135;
+}
+
+input::-webkit-input-placeholder {
+ color: rgba(255,255,255,0.2);
+}
+input::-moz-placeholder {
+ color: rgba(255,255,255,0.2);
+}
+input:-ms-input-placeholder {
+ color: rgba(255,255,255,0.2);
+}
+input:-moz-placeholder {
+ color: rgba(255,255,255,0.2);
+}

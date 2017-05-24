@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <script type="text/javascript" src="/static/angular.min.js"></script>
+
+    <script type="text/javascript" src="/static/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <link href="/static/css/signin.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+<body ng-app="myApp" ng-controller="processCtrl">
+  <div class="container">
+    {% block nav %}
+        {% include 'nav.html' %}
+    {% endblock %}
+
+    <div>
+      <a class="btn btn-success btn-xs" href="/supvisor/add/">Add new process <span class="glyphicon glyphicon-plus"></a>
+    </div>
+
+     <div class="table-responsive">
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>State</th>
+            <th>Description</th>
+            <th>Name</th>
+            <th>Command</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="item in myData">
+            <td>{{'{{$index + 1}'}}}</td>
+            <td>
+            	<label ng-if="item.state === 0" class="label label-warning">Stop</label>
+            	<label ng-if="item.state === 1" class="label label-success">Running</label>
+            	<label ng-if="item.state === 2" class="label label-warning">Unknow</label>
+            	<label ng-if="item.state === 3" class="label label-danger">Server has been stop!</label>
+            </td>
+            <td>{{'{{item.description}'}}}</td>
+            <td>{{'{{item.name}'}}}</td>
+            <td width="50%">
+            	{{'{{item.command}'}}}
+            </td>
+            <td>
+            	<a ng-if="item.state === 1" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/restart/">Restart</a>
+            	<a ng-if="item.state == 2 || item.state == 0" class="btn btn-success btn-xs" href="/supvisor/{{'{{item.name}'}}}/start/">Start</a>
+            	<a ng-if="item.state != 0" ng-hide="item.state == 2" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+              <a ng-if="item.state == 0 || item.state == 2" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span ng-hide="myData.length > 0">Please add new process!</span>
+    </div><!--end of .table-responsive-->
+  </div>
+</body>
+<script>
+var app = angular.module('myApp',[]);
+
+app.controller("processCtrl", function ($scope,$http,$timeout){
+
+  $scope.reload = function () {
+    $http.get('/supvisor/json/').
+        then(function (response) {
+            $scope.myData = response.data.process;
+            console.log($scope.myData);
+      });
+
+    $timeout(function(){
+      $scope.reload();
+    },10000)
+  };
+  $scope.reload();
+});
+</script>
+</html>

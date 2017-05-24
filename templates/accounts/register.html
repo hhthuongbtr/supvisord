@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign up</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <link href="/static/css/signin.css" rel="stylesheet">
+
+    <script type="text/javascript" scr="/static/bootstrap/js/jquery-2.1.4.js"></script>
+    <script type="text/javascript" scr="/static/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="color: red;">
+      {% if form.errors %}
+          <p class="error">Check for username and password</p>
+      {% endif %}
+    </div>
+    <form class="form-signin" action="/accounts/register/" method="post">
+        {% csrf_token %}
+        <h2 class="form-signin-heading">Please sign up</h2>
+        <label for="id_username" class="sr-only">User name:</label>
+        <input id="id_username" maxlength="30" name="username" type="text" value="" class="form-control" placeholder="Required. 30 characters or fewer" required autofocus>
+        <label for="id_password1" class="sr-only">Password:</label>
+        <input id="id_password1" name="password1" type="password" class="form-control" placeholder="Password" required>
+        <label for="id_password2" class="sr-only">Password confirmation:</label>
+        <input id="id_password2" name="password2" type="password" class="form-control" placeholder="Enter the same password" required>
+
+        <input class="btn btn-lg btn-primary btn-block" type="submit" value="Sign up">
+    </form>
+
+  </div> <!-- /container -->
+</body>
+</html>

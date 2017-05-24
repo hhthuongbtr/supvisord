@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div>
+    <input id="ibt1" name="ibt1" type="text" value="{{ip}}" class="title" />
+      <input type="button" name="load" onclick="load()" value="Load">
+    </div>
+    <embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" width="640"
+            height="480" id="vlc">
+    </embed>
+
+    <script type="text/javascript" language="Javascript">
+        function load(){
+          var vlc = document.getElementById("vlc");
+          vlc.audio.toggleMute();
+          var options = new Array();
+          var uri = document.getElementById("ibt1").value;
+          var id = vlc.playlist.add(uri, "fancy name", options);
+          vlc.playlist.playItem(id);
+        }
+      load();
+    </script>
+    </div><!-- /.container -->
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>F-1 Feeder</title>
+</head>
+
+<body ng-app="F1FeederApp" ng-controller="driversController">
+  <table>
+    <thead>
+      <tr><th colspan="4">Drivers Championship Standings</th></tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="driver in driversList">
+        <td>{{$index + 1}}</td>
+        <td>
+          <img src="img/flags/{{driver.Driver.nationality}}.png" />
+          {{driver.Driver.givenName}}&nbsp;{{driver.Driver.familyName}}
+        </td>
+        <td>{{driver.Constructors[0].name}}</td>
+        <td>{{driver.points}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <script type="text/javascript" src="/static/angular.min.js"></script>
+  <script type="text/javascript" src="/static/app/js/app.js"></script>
+  <script type="text/javascript" src="/static/app/js/services.js"></script>
+  <script type="text/javascript" src="/static/app/js/controllers.js"></script>
+</body>
+</html>

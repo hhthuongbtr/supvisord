@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+
+    <script type="text/javascript" src="/static/jquery-2.1.4.js"></script>
+    <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
+    <link href="/static/css/signin.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 60px;
+            padding-bottom: 60px;
+        }
+    </style>
+</head>
+
+<body ng-app="myApp" ng-controller="processCtrl">
+  <div class="container">
+    {% block nav %}
+        {% include 'nav.html' %}
+    {% endblock %}
+      <div align="center"><h1> HƯỚNG DẪN SỬ DỤNG </h1></br>
+       Lưu ý chung khi sử dụng tool: không được gõ tiếng việt có dấu, kí tự đặc biệt, kí tự khoảng trắng. Tên hiển thị sẽ được tự động thêm vào ".ini" sau khi được khởi tạo.</br>
+
+       </div>
+      <ul>
+        <li><h3>TẠO PROCESS MỚI</h3></li>
+          Đăng nhập --> Chọn "Add new process" --> nhập thông tin (stream type, name, syteam key, ip) --> chọn nút "Save anh Start". chờ web load 3-5s process sẽ được tạo mới và hoạt động.
+        <li><h3>START, RESTART PROCESS SẴN CÓ</h3></li>
+          Đăng nhập --> Chọn "Add new process" --> nhập thông tin (stream type, syteam key, ip), nếu không thay đổi thông tin thì process sẽ được start với thông tin cũ --> chọn nút "Save anh Start". chờ web load 3-5s process sẽ được tạo mới và hoạt động.
+        <li><h3>GIAO DIỆN CHÍNH</h3></li>
+          <div align="center">SAU 10S TRANG WEB SẼ TỰ ĐỘNG CẬP NHẬT THÔNG TIN MỚI</BR></div>
+          State: Trạng thái process (running, stop, ..)</br>
+          Description: Mô tả chi tiết trạng thái của process, thời gian chạy (Uptime), nếu thời gian chạy của process đạt ngưỡng 30s rồi tự về 0s --> process dang có lỗi.</br>
+          Command: Hiển thị nội dung câu lệnh của process, đồng thời cho biết ip và stream key đang dùng cho process này.</br>
+          Action: điều khiển start, stop, delete process.</br>
+          Add new process: thêm mới process.</br>
+      <img src="/static/picture/document/dashboard.PNG" alt="Picture of document" /></br>
+
+        <li><h3>GIAO DIỆN THÊM MỚI PROCESS</h3></li>
+          Stream type: chọn loại streaming (Facebook, Youtube) để khởi tạo câu lệnh tương ứng.</br>
+          Name: Tên hiển thị của process</br>
+          Stream key (khóa luồng): Mỗi lần stream Facebook, youtube sẽ cung cấp thông tin stream key khác nhau, tốt nhất mỗi lần start process nên nhập mới stream key và kiểm tra thông tin chính xác.</br>
+          IP:Port: Nhập ip luồng cần stream vd: 224.1.1.1:1234. nếu thông tin này bỏ trống hệ thống sẽ tạo process mới với stream key mặt định là 225.1.1.7:30120.</br>
+          Nút "Save anh Start": lưu lại thông tin đồng thời start process, trang web sẽ load chậm từ 3-5s (thời gian chờ các tiến tình cập nhật và khởi tạo luồng mới xảy ra bên trong server).</br>
+      <img src="/static/picture/document/add.PNG" alt="Picture of document" /></br>
+        <li><h3>GIAO DIỆN START, RESTART PROCESS CÓ SẴN</h3></li>
+          Stream type: hệ thống sẽ tự chọn stream type tương ứng, nếu stream type là "UNKNOW" bạn cần chọn đáng stream type bạn cần.</br>
+          Stream key (khóa luồng): Mỗi lần stream Facebook, youtube sẽ cung cấp thông tin stream key khác nhau, tốt nhất mỗi lần start process nên nhập mới stream key và kiểm tra thông tin chính xác.</br>
+          IP:Port: hệ thống sẽ hiện thì thông tin ip cũ, nhập ip hợp lệ vd: 224.1.1.1:1234</br>
+          Nút "Save anh Start": lưu lại thông tin đồng thời start process, trang web sẽ load chậm từ 3-5s (thời gian chờ các tiến tình cập nhật và khởi tạo luồng mới xảy ra bên trong server).</br>
+      <img src="/static/picture/document/edit.PNG" alt="Picture of document" /></br>
+      </ul>
+
+  </div>
+</body>
+</html>
+
