@@ -86,8 +86,10 @@ class Streaming:
         command=File(self.fileName).get_command()
         if command.find('facebook') >=0:
             return "Facebook"
-        if command.find('youtube') >=0:
+        elif command.find('youtube') >=0:
             return "Youtube"
+        elif self.fileName.startswith("rtmp"):
+            return "rtmp"
         return "Unknow"
 
 
@@ -269,9 +271,9 @@ class Process:
 class RTMP:
     def __init__(self, fileName):
         if fileName.find(extention) > 0:
-            self.fileName = "rtmp_"+fileName
+            self.fileName = fileName
         else:
-            self.fileName = "rtmp_"+fileName+extention
+            self.fileName = fileName+extention
         self.keySearchIP = 'udp://'
         self.endKeySearchIP = ' -vcodec'
         self.keySearchDomain = 'flv '

@@ -32,11 +32,18 @@ def supvisor_json(request):
 	for job in configFileList:
 		#job = job.strip( '.ini' )
 		#print job
-		args.append({'name'				: job if job else None,
-					'state'				: Process(job).get_job_status() if job else None,
-					'description'		: Process(job).job_status() if job else None,
-					'command'			: File(job).get_command() if job else None,
-					})
+		if request.user.is_superuser:
+			args.append({'name'				: job if job else None,
+						'state'				: Process(job).get_job_status() if job else None,
+						'description'		: Process(job).job_status() if job else None,
+						'command'			: File(job).get_command() if job else None,
+						})
+		elif job.startswith(request.user.username):
+			args.append({'name'				: job if job else None,
+						'state'				: Process(job).get_job_status() if job else None,
+						'description'		: Process(job).job_status() if job else None,
+						'command'			: File(job).get_command() if job else None,
+						})
 	json_data = json.dumps({"process": args})
 	return HttpResponse(json_data, content_type='application/json', status=200)
 
@@ -52,9 +59,11 @@ def start_job(request, name):
 	if typeStream == 'Facebook':
 		args['ip'] = Facebook(name).get_ip()
 		args['streamkey'] = Facebook(name).get_streamkey()
-	if Streaming(name).get_type() == 'Youtube':
+	elif Streaming(name).get_type() == 'Youtube':
 		args['ip'] = Youtube(name).get_ip()
 		args['streamkey'] = Youtube(name).get_streamkey()
+	elif Streaming(name).get_type() == 'rtmp':
+		return HttpResponseRedirect('/supvisor/rtmp/start/')
 	if request.method == 'POST':
 		#Restart job if user not input new infor
 		if 'startWithOldInfo' in request.POST:
@@ -92,7 +101,7 @@ def start_job(request, name):
 				Process(name).update_job()
 				Process(name).start_job()
 				return HttpResponseRedirect('/supvisor/')
-			if event == "Youtube":
+			elif event == "Youtube":
 				Youtube(name).save(ip, streamkey)
 				if Process(name).get_job_status() == 1:
 					Process(name).stop_job()
@@ -128,6 +137,8 @@ def add_process(request):
 			name = request.POST.get('name', '').strip()
 			#Cut white space
 			name = name.replace(" ", "")
+			#add user name to file name
+			name = request.user.username + '_'+name
 			#End get new infor from template
 			msg= str(timezone.now())+" user: "+request.user.username+" add process "+name 
 			write_log(request.user.username,"add", msg)
@@ -138,7 +149,7 @@ def add_process(request):
 				Process(name).update_job()
 				Process(name).start_job()
 				return HttpResponseRedirect('/supvisor/')
-			if event == "Youtube":
+			elif event == "Youtube":
 				Youtube(name).save(ip, streamkey)
 				if Process(name).get_job_status() == 1:
 					Process(name).stop_job()
@@ -181,6 +192,8 @@ def rtmp_add_process(request):
 			name = request.POST.get('name', '').strip()
 			#Cut white space
 			name = name.replace(" ", "")
+			#add user name to file name
+			name = 'rtmp_'+name
 			encode = request.POST.get('encode', '').strip()
 			#End get new infor from template
 			RTMP(name).save(ip, encode, domain)
@@ -192,8 +205,8 @@ def rtmp_add_process(request):
 	return render_to_response('supvisor/rtmp/add.html')
 
 def rtmp_add_json(request):
-	if not request.user.is_authenticated():
-		return HttpResponseRedirect('/accounts/login')
+	#if not request.user.is_authenticated():
+	#	return HttpResponseRedirect('/accounts/login')
 	configString =  File("rtmp.json.template").read_template()
 	data = json.loads(configString)
 	args = []
@@ -203,3 +216,14 @@ def rtmp_add_json(request):
 					})
 	json_data = json.dumps({"rtmp": args})
 	return HttpResponse(json_data, content_type='application/json', status=200)
+
+def rtmp_start(request):
+	user = user_info(request)
+	args={}
+	args['name'] = name
+	typeStream=Streaming(name).get_type()
+	args['typeStream'] = typeStream
+	if typeStream == 'rtmp':
+		args['ip'] = RTMP(name).get_ip()
+		args['domain'] = RTMP(name).get_domain()
+	return render_to_response('supvisor/rtmp/start.html', args)
