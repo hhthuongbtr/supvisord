@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script type="text/javascript" src="/static/angular.min.js"></script>
     
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
@@ -25,7 +27,7 @@
     </script>
 </head>
 
-<body ng-app="myApp" ng-controller="processCtrl">
+<body ng-app="myApp" ng-controller="rtmpAddCtrl">
   <div class="container">
     <form class="well form-horizontal" action="/supvisor/rtmp/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
         {% csrf_token %}
@@ -40,7 +42,7 @@
 	   
 	  <div class="form-group"> 
 	    <label class="col-md-4 control-label">Name</label>
-	      <div class="col-md-4 selectContainer">
+	      <div class="col-md-5 selectContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
 	          <input type="text" class="form-control" name="name" id="name" placeholder="Name of process">
@@ -50,13 +52,24 @@
 	  </div>
 	  </div>
 
-	  <!-- Stream key -->	    
+	  <!-- encode -->	    
 	  <div class="form-group">
-	    <label class="col-md-4 control-label">Domain:</label>
-	      <div class="col-md-4 inputGroupContainer">
+	    <label class="col-md-4 control-label">Encode</label>
+	      <div class="col-md-5 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <textarea class="form-control" name="domain" id="domain" placeholder="Domain"></textarea>
+	            <textarea class="form-control" name="encode" id="encode" placeholder="ancode" rows="5"> {{'{{myData[0].encode}'}}} </textarea>
+	    </div>
+	    </div>
+	   </div>
+
+	  <!-- Domain -->	    
+	  <div class="form-group">
+	    <label class="col-md-4 control-label">Domain</label>
+	      <div class="col-md-5 inputGroupContainer">
+	      <div class="input-group">
+	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+	            <textarea class="form-control" name="domain" id="domain" placeholder="example.com/stream key" rows="2"></textarea>
 	    </div>
 	    </div>
 	   </div>
@@ -64,10 +77,10 @@
 	  <!-- IP -->
 	  <div class="form-group">
 	    <label class="col-md-4 control-label">IP:Port</label>
-	      <div class="col-md-4 inputGroupContainer">
+	      <div class="col-md-5 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <input type="text" class="form-control" name="ip" placeholder="Default: 225.1.1.7:30120">
+	            <input type="text" class="form-control" name="ip" value="{{'{{myData[0].ip}'}}}">
 	    </div>
 	    </div>
 	  </div>
@@ -84,4 +97,19 @@
     </form>
     </div>
 </body>
+<script>
+var app = angular.module('myApp',[]);
+
+app.controller("rtmpAddCtrl", function ($scope,$http){
+
+  $scope.reload = function () {
+    $http.get('/supvisor/rtmp/add/json').
+        then(function (response) {
+            $scope.myData = response.data.rtmp;
+            console.log($scope.myData);
+      });
+  };
+  $scope.reload();
+});
+</script>
 </html>

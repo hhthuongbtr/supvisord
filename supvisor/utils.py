@@ -285,12 +285,21 @@ class RTMP:
         command=File(self.fileName).get_command()
         return command[command.find(self.endKeySearchDomain) + len(self.keySearchDomain) : command.find(self.endKeySearchDomain)]
 
-    def save(self, ip, domain):
+    def save(self, ip, encode, domain):
+        #read template supervisord config
         text=File('rtmp.template').read_template()
+        #read config rtmp template as json data
+        configString =  File("rtmp.json.template").read_template()
+        #Convert to json data
+        data = json.loads(configString)
+        #edit encode
+        text=text.replace('[encode]', encode)
         #edit name
         text=text.replace('[name]', self.fileName)
+        #edit binary system name
+        text=text.replace('[binary_system]', data["binary_system"])
         #edit ip
-        text=text.replace('[ip]',ip)
+        text=text.replace('[ip]', ip)
         #edit stream key
         text=text.replace('[domain]', domain)
         File(self.fileName).write_conf_file(text)

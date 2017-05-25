@@ -178,17 +178,28 @@ def rtmp_add_process(request):
 			#Get new infor from template
 			domain = request.POST.get('domain', '').strip()
 			ip = request.POST.get('ip', '').strip()
-			#Return deffault ip if new ip is none
-			if not ip:
-				ip = '225.1.1.7:30120'
 			name = request.POST.get('name', '').strip()
 			#Cut white space
 			name = name.replace(" ", "")
+			encode = request.POST.get('encode', '').strip()
 			#End get new infor from template
-			RTMP(name).save(ip, domain)
+			RTMP(name).save(ip, encode, domain)
 			if Process(name).get_job_status() == 1:
 				Process(name).stop_job()
 			Process(name).update_job()
 			Process(name).start_job()
 			return HttpResponseRedirect('/supvisor/')
 	return render_to_response('supvisor/rtmp/add.html')
+
+def rtmp_add_json(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
+	configString =  File("rtmp.json.template").read_template()
+	data = json.loads(configString)
+	args = []
+	args.append({'binary_system'		: data["binary_system"] if data["binary_system"] else "",
+				'encode'				: data["encode"] if data["encode"] else "",
+				'ip'					: data["ip"] if data["ip"] else "",
+					})
+	json_data = json.dumps({"rtmp": args})
+	return HttpResponse(json_data, content_type='application/json', status=200)
