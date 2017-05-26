@@ -14,4 +14,5 @@ urlpatterns = patterns('',
     url(r'^$', 'supvisor.views.supvisor'), 
     url(r'^accounts/', include('accounts.urls')),
     url(r'^supvisor/', include('supvisor.urls')),
+    url(r'^log/', include('log.urls')),
 )

@@ -78,7 +78,7 @@ def start_job(request, name):
 				ip = '225.1.1.7:30120'
 			#Get new infor from template
 			#write log
-			msg= str(timezone.now())+" user: "+request.user.username+" edit process "+name 
+			msg= " user: "+request.user.username+" edit process "+name 
 			write_log(request.user.username,"edit", msg)
 			#End check new infor
 
@@ -98,7 +98,7 @@ def stop_job(request, name):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	if Process(name).get_job_status() != 0:
-		msg= str(timezone.now())+" user: "+request.user.username+" stop process "+name 
+		msg= " user: "+request.user.username+" stop process "+name 
 		write_log(request.user.username,"stop", msg)
 		Process(name).stop_job()
 	return HttpResponseRedirect('/supvisor/')
@@ -122,7 +122,7 @@ def add_process(request):
 			#add user name to file name
 			name = request.user.username + '_'+name
 			#End get new infor from template
-			msg= str(timezone.now())+" user: "+request.user.username+" add process "+name 
+			msg= " user: "+request.user.username+" add process "+name 
 			write_log(request.user.username,"add", msg)
 			if event == "Facebook":
 				Facebook(name).save(ip, streamkey)
@@ -148,7 +148,7 @@ def delete_process(request, name):
 	if Process(name).get_job_status() == 1:
 		return HttpResponse("<alert>Process is RUNNING, you need stop process!</alert>")
 	else:
-		msg= str(timezone.now())+" user: "+request.user.username+" delete process "+name 
+		msg= " user: "+request.user.username+" delete process "+name 
 		write_log(request.user.username,"delete", msg)
 		Process(name).stop_job()
 		File(name).delete()
@@ -187,6 +187,8 @@ def rtmp_add_process(request):
 				Process(name).stop_job()
 			Process(name).update_job()
 			Process(name).start_job()
+			msg= " user: "+request.user.username+" add process "+name 
+			write_log(request.user.username,"add", msg)
 			return HttpResponseRedirect('/supvisor/')
 	return render_to_response('supvisor/rtmp/add.html')
 
@@ -226,6 +228,8 @@ def rtmp_start_job(request, name):
 				Process(name).stop_job()
 			Process(name).update_job()
 			Process(name).start_job()
+			msg= " user: "+request.user.username+" edit process "+name 
+			write_log(request.user.username,"edit", msg)
 		return HttpResponseRedirect('/supvisor/')
 	else:
 		user = user_info(request)

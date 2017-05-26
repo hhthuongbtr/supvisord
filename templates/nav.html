@@ -16,6 +16,7 @@
           <ul class="nav navbar-nav">
             <li><a href="/supvisor/">Dashboard</a></li>
             <li><a href="/supvisor/document/">Document</a></li>
+            <li ng-hide="!{{is_superuser}}"><a href="/log/">Log</a></li>
           </ul>
           <!--End show menu-->
 
