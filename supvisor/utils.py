@@ -106,13 +106,13 @@ class Facebook:
         else:
             self.fileName = fileName+extention
         self.keySearchIP = 'udp://'
-        self.endKeySearchIP = ' -vcodec'
+        self.endKeySearchIP = ' '
         self.keySearchStreamKey = '/rtmp/'
         self.endKeySearchStreamKey = '\n'
 
     def get_ip(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP)]
+        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP, command.find(self.keySearchIP))]
 
     def get_streamkey(self):
         command=File(self.fileName).get_command()
@@ -139,13 +139,13 @@ class Youtube:
         else:
             self.fileName = fileName+extention
         self.keySearchIP = 'udp://'
-        self.endKeySearchIP = ' -c:v'
+        self.endKeySearchIP = ' '
         self.keySearchStreamKey = '/live2/'
         self.endKeySearchStreamKey = '\n'
 
     def get_ip(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP)]
+        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP, command.find(self.keySearchIP))]
 
     def get_streamkey(self):
         command=File(self.fileName).get_command()
@@ -275,17 +275,23 @@ class RTMP:
         else:
             self.fileName = fileName+extention
         self.keySearchIP = 'udp://'
-        self.endKeySearchIP = ' -vcodec'
-        self.keySearchDomain = 'flv '
+        self.endKeySearchIP = ' '
+        self.fristkeySearchEncode = 'udp://'
+        self.secondKeySearchEncode = ' '
+        self.endKeySearchEncode = 'rtmp://'
+        self.keySearchDomain = 'rtmp://'
         self.endKeySearchDomain = '\n'
 
     def get_ip(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.keySearchIP) + len(self.keySearchIP): command.find(self.endKeySearchIP)]
+        return command[command.find(self.keySearchIP) + len(self.keySearchIP) : command.find(self.endKeySearchIP, command.find(self.keySearchIP))]
 
     def get_domain(self):
         command=File(self.fileName).get_command()
-        return command[command.find(self.endKeySearchDomain) + len(self.keySearchDomain) : command.find(self.endKeySearchDomain)]
+        return command[command.find(self.keySearchDomain) + len(self.keySearchDomain) : command.find(self.endKeySearchDomain)]
+    def get_encode(self):
+        command=File(self.fileName).get_command()
+        return command[command.find(self.secondKeySearchEncode, command.find(self.fristkeySearchEncode))+1 : command.find(self.endKeySearchEncode)]
 
     def save(self, ip, encode, domain):
         #read template supervisord config

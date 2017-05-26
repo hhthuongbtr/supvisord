@@ -49,10 +49,18 @@
           <tr ng-repeat="item in myData">
             <td>{{'{{$index + 1}'}}}</td>
             <td>
+            <!--Facebook, youtube -->
             	<label ng-if="item.state === 0" class="label label-warning">Stop</label>
             	<label ng-if="item.state === 1" class="label label-success">Running</label>
             	<label ng-if="item.state === 2" class="label label-warning">Unknow</label>
             	<label ng-if="item.state === 3" class="label label-danger">Server has been stop!</label>
+            <!--End Facebook, youtube -->
+            <!--RTMP -->
+              <label ng-if="item.state === 10" class="label label-warning">Stop</label>
+              <label ng-if="item.state === 11" class="label label-success">Running</label>
+              <label ng-if="item.state === 12" class="label label-warning">Unknow</label>
+              <label ng-if="item.state === 13" class="label label-danger">Server has been stop!</label>
+            <!--end RTMP -->
             </td>
             <td>{{'{{item.description}'}}}</td>
             <td>{{'{{item.name}'}}}</td>
@@ -60,10 +68,18 @@
             	{{'{{item.command}'}}}
             </td>
             <td>
-            	<a ng-if="item.state === 1" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/restart/">Restart</a>
+            <!--Facebook, youtube -->
+            	<a ng-if="item.state == 1 " class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/restart/">Restart</a>
             	<a ng-if="item.state == 2 || item.state == 0" class="btn btn-success btn-xs" href="/supvisor/{{'{{item.name}'}}}/start/">Start</a>
-            	<a ng-if="item.state != 0" ng-hide="item.state == 2" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+            	<a ng-if="item.state == 1 || item.state == 2" ng-hide="item.state == 2" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
               <a ng-if="item.state == 0 || item.state == 2" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
+            <!--End Facebook, youtube -->
+            <!--RTMP -->
+              <a ng-if="item.state == 11 " class="btn btn-warning btn-xs" href="/supvisor/rtmp/restart/{{'{{item.name}'}}}/"">Restart</a>
+              <a ng-if="item.state == 12 || item.state == 10" class="btn btn-success btn-xs" href="/supvisor/rtmp/start/{{'{{item.name}'}}}/">Start</a>
+              <a ng-if="item.state == 11 || item.state == 12" ng-hide="item.state == 12" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+              <a ng-if="item.state == 10 || item.state == 12" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
+            <!--End RTMP -->
             </td>
           </tr>
         </tbody>

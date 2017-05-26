@@ -34,7 +34,7 @@ def supvisor_json(request):
 		#print job
 		if request.user.is_superuser:
 			args.append({'name'				: job if job else None,
-						'state'				: Process(job).get_job_status() if job else None,
+						'state'				: 10+Process(job).get_job_status() if job.startswith("rtmp") else Process(job).get_job_status(),
 						'description'		: Process(job).job_status() if job else None,
 						'command'			: File(job).get_command() if job else None,
 						})
@@ -62,8 +62,6 @@ def start_job(request, name):
 	elif Streaming(name).get_type() == 'Youtube':
 		args['ip'] = Youtube(name).get_ip()
 		args['streamkey'] = Youtube(name).get_streamkey()
-	elif Streaming(name).get_type() == 'rtmp':
-		pass
 	if request.method == 'POST':
 		#Restart job if user not input new infor
 		if 'startWithOldInfo' in request.POST:
@@ -82,35 +80,19 @@ def start_job(request, name):
 			#write log
 			msg= str(timezone.now())+" user: "+request.user.username+" edit process "+name 
 			write_log(request.user.username,"edit", msg)
-			#Check new infor not change
-			if Streaming(name).get_type() == 'Youtube':
-				if Youtube(name).get_ip()==ip and Youtube(name).get_streamkey()==streamkey:
-					Process(name).restart_job()
-					return HttpResponseRedirect('/supvisor/')
-			if Streaming(name).get_type() == 'Facebook':
-				if Youtube(name).get_ip()==ip and Youtube(name).get_streamkey()==streamkey:
-					Process(name).restart_job()
-					return HttpResponseRedirect('/supvisor/')
 			#End check new infor
 
 			#Update job if new onfor and old infor different
 			if event == "Facebook":
 				Facebook(name).save(ip, streamkey)
-				if Process(name).get_job_status() == 1:
-					Process(name).stop_job()
-				Process(name).update_job()
-				Process(name).start_job()
-				return HttpResponseRedirect('/supvisor/')
 			elif event == "Youtube":
 				Youtube(name).save(ip, streamkey)
-				if Process(name).get_job_status() == 1:
-					Process(name).stop_job()
-				Process(name).update_job()
-				Process(name).start_job()
-				return HttpResponseRedirect('/supvisor/')
-			#End update job if new onfor and old infor different
-	return render_to_response('supvisor/start.html', args)
-	
+			if Process(name).get_job_status() == 1:
+				Process(name).stop_job()
+			Process(name).update_job()
+			Process(name).start_job()
+			return HttpResponseRedirect('/supvisor/')
+	return render_to_response('supvisor/start.html', args)	
 
 def stop_job(request, name):
 	if not request.user.is_authenticated():
@@ -184,10 +166,14 @@ def document(request):
 def rtmp_add_process(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
+	if not request.user.is_superuser:
+		return HttpResponseRedirect('/supvisor/add/')
 	if request.method == 'POST':
 		if 'saveAndStart' in request.POST:
 			#Get new infor from template
 			domain = request.POST.get('domain', '').strip()
+			if domain.startswith("rtmp://"):
+				domain = domain.replace("rtmp://","")
 			ip = request.POST.get('ip', '').strip()
 			name = request.POST.get('name', '').strip()
 			#Cut white space
@@ -213,17 +199,39 @@ def rtmp_add_json(request):
 	args.append({'binary_system'		: data["binary_system"] if data["binary_system"] else "",
 				'encode'				: data["encode"] if data["encode"] else "",
 				'ip'					: data["ip"] if data["ip"] else "",
+				'domain'				: data["domain"] if data["domain"] else "",
 					})
 	json_data = json.dumps({"rtmp": args})
 	return HttpResponse(json_data, content_type='application/json', status=200)
 
-def rtmp_start(request):
-	user = user_info(request)
-	args={}
-	args['name'] = name
-	typeStream=Streaming(name).get_type()
-	args['typeStream'] = typeStream
-	if typeStream == 'rtmp':
+@csrf_exempt
+def rtmp_start_job(request, name):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/accounts/login')
+	if request.method == 'POST':
+		if 'saveAndStart' in request.POST:
+			#Get new infor from template
+			encode = request.POST.get('encode', '').strip()
+			print encode
+			domain = request.POST.get('domain', '').strip()
+			print domain
+			ip = request.POST.get('ip', '').strip()	
+			print ip
+			#check infor is change
+			if RTMP(name).get_ip()==ip and RTMP(name).get_encode()==encode and RTMP(name).get_domain()==domain:
+				Process(name).restart_job()
+				return HttpResponseRedirect('/supvisor/')
+			RTMP(name).save(ip, encode, domain)
+			if Process(name).get_job_status() == 1:
+				Process(name).stop_job()
+			Process(name).update_job()
+			Process(name).start_job()
+		return HttpResponseRedirect('/supvisor/')
+	else:
+		user = user_info(request)
+		args={}
+		args['name'] = name
 		args['ip'] = RTMP(name).get_ip()
 		args['domain'] = RTMP(name).get_domain()
-	return render_to_response('supvisor/rtmp/start.html', args)
+		args['encode'] = RTMP(name).get_encode()
+		return render_to_response('supvisor/rtmp/start.html', args)

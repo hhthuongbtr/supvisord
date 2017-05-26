@@ -20,6 +20,12 @@
 		    		alert ("Enter your Stream Key");
 		    		return false;
 		    	}
+		    	else{
+		    		if (document.form.event.options[event.selectedIndex].value == "RTMP") {
+		    			alert ("Please choose order event!");
+		    			return false;
+		    		}
+		    	}
 		    }
 		  }
 		function event_onchange(){
