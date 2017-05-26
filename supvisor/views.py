@@ -63,7 +63,7 @@ def start_job(request, name):
 		args['ip'] = Youtube(name).get_ip()
 		args['streamkey'] = Youtube(name).get_streamkey()
 	elif Streaming(name).get_type() == 'rtmp':
-		return HttpResponseRedirect('/supvisor/rtmp/start/')
+		pass
 	if request.method == 'POST':
 		#Restart job if user not input new infor
 		if 'startWithOldInfo' in request.POST:

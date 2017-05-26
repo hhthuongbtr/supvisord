@@ -22,6 +22,12 @@
 		    	}
 		    }
 		  }
+		function event_onchange(){
+			var event = document.getElementById( 'event' );
+			if (event.options[event.selectedIndex].value == "RTMP"){
+				window.location.href = "/supvisor/rtmp/add/";
+			}
+		};
     </script>
 </head>
 
@@ -42,9 +48,10 @@
 	      <div class="col-md-4 selectContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
-	      <select name="event" class="form-control selectpicker" >
+	      <select name="event" id="event" class="form-control selectpicker" onchange="event_onchange()">
 	      	<option>Facebook</option>
 	      	<option>Youtube</option>
+	      	<option>RTMP</option>
 	      </select>
 	    </div>
 	  </div>
