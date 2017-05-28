@@ -118,16 +118,16 @@
 			var domain = document.form.domain.value.trim();
 			var encode = document.form.encode.value.trim();
 			var ip = document.form.ip.value.trim();
-			document.getElementById("cmd").innerHTML = "Command: ffmpeg -re -i udp://" + ip + encode + " rtmp://" + domain;
+			document.getElementById("cmd").innerHTML = "Command: ffmpeg -re -i udp://" + ip + " " + encode + " rtmp://" + domain;
 		};
 		function name_change(){
 			var name = document.getElementById( 'name' ).value.trim();
-			document.getElementById("program").innerHTML = "Program: rtmp_" + name;
+			document.getElementById("program").innerHTML = "Program: rtmp_" + name + ".ini";
 		};
     </script>
 </head>
 
-<body ng-app="myApp" ng-controller="rtmpAddCtrl">
+<body ng-app="myApp" ng-controller="rtmpAddCtrl" onload="command()">
   <div class="container">
     <form class="well form-horizontal" action="/supvisor/rtmp/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
         
