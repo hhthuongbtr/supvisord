@@ -102,12 +102,21 @@ function check_ip(){
 	};
 };
 
+function check_ip_unicode(){
+	var ip = document.getElementById( 'ip' ).value.trim();
+	return	{
+		"result" : check_unicode(ip),
+		"error" : "IP không chứa kí tự đặc biệt, dấu tiếng Việt!"
+	};
+};
+
 //supvisor/rtmp/add/
 function command(){
 	var domain = document.form.domain.value.trim();
 	var encode = document.form.encode.value.trim();
 	var ip = document.form.ip.value.trim();
 	document.getElementById("cmd").innerHTML = "Command: ffmpeg -re -i udp://" + ip + " " + encode + " rtmp://" + domain;
+	name_change();
 };
 
 //supvisor/rtmp/add/
@@ -131,7 +140,8 @@ function SubmitCheckTextField(){
 		check_name_unicode,
 		check_streamkey,
 		check_streamkey_unicode,
-		check_ip
+		check_ip,
+		check_ip_unicode
 	];
 
 	var errors = "";
@@ -155,7 +165,8 @@ function start_SubmitCheckTextField(){
 	var arrs = [
 		check_streamkey,
 		check_streamkey_unicode,
-		check_ip
+		check_ip,
+		check_ip_unicode
 	];
 
 	var errors = "";
@@ -183,7 +194,8 @@ function rtmp_SubmitCheckTextField(){
 		check_encode_unicode,
 		check_domain,
 		check_domain_unicode,
-		check_ip
+		check_ip,
+		check_ip_unicode
 	];
 
 	var errors = "";
@@ -209,7 +221,8 @@ function rtmp_start_SubmitCheckTextField(){
 		check_encode_unicode,
 		check_domain,
 		check_domain_unicode,
-		check_ip
+		check_ip,
+		check_ip_unicode
 	];
 
 	var errors = "";
