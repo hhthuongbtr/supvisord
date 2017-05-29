@@ -9,37 +9,12 @@
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link href="/static/css/signin.css" rel="stylesheet">
-    <script type="text/javascript">
-		function SubmitCheckTextField(){
-		    if (document.form.name.value == "") {
-		      alert ("Enter Name streaming!");
-		      return false;
-		    }
-		    else{
-		    	if (document.form.domain.value == ""){
-		    		alert ("Enter your Domain");
-		    		return false;
-		    	}
-		    	else{
-		    		if (document.form.encode.value == ""){
-		    			alert ("Enter your Encode");
-		    			return false;
-		    		}
-		    		else{
-		    			if (document.form.ip.value == "") {
-		    				alert ("Enter your IP");
-		    				return false;
-		    			}
-		    		}
-		    	}
-		    }
-		  }
-    </script>
+    <script type="text/javascript" src="/static/main.js"></script>
 </head>
 
 <body ng-app="myApp" ng-controller="rtmpAddCtrl">
   <div class="container">
-    <form class="well form-horizontal" action="/supvisor/rtmp/start/{{name}}/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
+    <form class="well form-horizontal" action="/supvisor/rtmp/start/{{name}}/" method="post" name="form" onsubmit="return rtmp_start_SubmitCheckTextField(this);">
         {% csrf_token %}
 	<fieldset>
 
@@ -76,7 +51,7 @@
 	      <div class="col-md-5 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <input type="text" class="form-control" name="ip" value="{{ip}}">
+	            <input type="text" class="form-control" name="ip" id="ip" value="{{ip}}">
 	    </div>
 	    </div>
 	  </div>

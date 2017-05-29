@@ -9,15 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link href="/static/css/signin.css" rel="stylesheet">
-    <script type="text/javascript">
-
-		function SubmitCheckTextField(){
-		    if (document.form.streamkey.value == "") {
-		      alert ("Enter Name streaming!");
-		      return false;
-		    }
-		  }
-    </script>
+    <script type="text/javascript" src="/static/main.js"></script>
 </head>
 
 <body ng-app="myApp" ng-controller="processCtrl">
@@ -28,7 +20,7 @@
 	  <legend>
 			{{name}}
 	  </legend>
-    <form class="well form-horizontal" action="/supvisor/{{name}}/start/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
+    <form class="well form-horizontal" action="/supvisor/{{name}}/start/" method="post" name="form" onsubmit="return start_SubmitCheckTextField(this);">
      {% csrf_token %}
 	  <!-- Event -->
 	   
@@ -63,7 +55,7 @@
 	      <div class="col-md-4 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <input type="text" class="form-control" name="ip" placeholder="Default: 225.1.1.7:30120" value="{{ip}}">
+	            <input type="text" class="form-control" name="ip" id="ip" placeholder="Default: 225.1.1.7:30120" value="{{ip}}">
 	    </div>
 	    </div>
 	  </div>

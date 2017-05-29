@@ -9,99 +9,13 @@
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link href="/static/css/signin.css" rel="stylesheet">
-    <script type="text/javascript">
-		function event_onchange(){
-			var event = document.getElementById( 'event' );
-			if (event.options[event.selectedIndex].value == "RTMP"){
-				window.location.href = "/supvisor/rtmp/add/";
-			}
-		};
-		
-		function check_unicode(str){
-			for (var i = 0; i < str.length; i++) {
-				if(str.charCodeAt(i) > 127) {
-					return false;
-				}
-			}
-			return true;
-		};
-		
-		function check_empty(str){
-			if (str == "") {
-				return false;
-			}
-			return true;
-		};
-		
-		function check_ip_fortmat(str){
-			var allow_char = "0123456789.: "
-			for (var i = 0; i < str.length; i++) {
-				
-					if(str.charCodeAt(i) > 127) {
-						return false;
-					}
-			}
-			return true;
-		};
-		
-		function check_name(){
-			var name = document.getElementById( 'name' ).value;
-			return	{
-				"result" : check_empty(name),
-				"error" : "Tên không được trống!"
-			};
-		}
-		function check_name_unicode(){
-			var name = document.getElementById( 'name' ).value;
-			return	{
-				"result" : check_unicode(name),
-				"error" : "Tên không chứa kí tự đặc biệt, dấu tiếng Việt!"
-			};
-		};
-		function check_streamkey(){
-			var streamkey = document.getElementById( 'streamkey' ).value;
-			return	{
-				"result" : check_empty(streamkey),
-				"error" : "Streamkey không được trống!"
-			};
-		}
-		function check_streamkey_unicode(){
-			var streamkey = document.getElementById( 'streamkey' ).value;
-			return	{
-				"result" : check_unicode(streamkey),
-				"error" : "Streamkey không chứa kí tự đặc biệt, dấu tiếng Việt!"
-			};
-		};
-		function SubmitCheckTextField(){
-			var arrs = [
-				check_name,
-				check_name_unicode,
-				check_streamkey,
-				check_streamkey_unicode
-			];
-
-			var errors = "";
-
-			arrs.forEach(function (fn) {
-				var item = fn();
-				if (item.result == false ) {
-					errors += "\n" + item.error;
-				}
-			});
-
-			if (errors.length > 1) {
-				alert(errors);
-				return false;
-			}
-			document.form.submit();
-		};
-    </script>
+    <script type="text/javascript" src="/static/main.js"></script>
 </head>
 
 <body ng-app="myApp" ng-controller="processCtrl">
   <div class="container">
     <form class="well form-horizontal" action="/supvisor/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
-        {% csrf_token %}
+        
 	<fieldset>
 
 	  <!-- Form Name -->
@@ -131,8 +45,7 @@
 	      <div class="col-md-4 selectContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	          <input type="text" class="form-control" name="name" id="name" placeholder="Name of process">
-
+	          <input type="text" class="form-control" name="name" id="name" placeholder="Name of process" onkeyup="name_onchange()">
 	      </select>
 	    </div>
 	  </div>
@@ -144,7 +57,7 @@
 	      <div class="col-md-4 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <textarea class="form-control" name="command" id="streamkey" placeholder="Stream key">{{streamkey}}</textarea>
+	            <textarea class="form-control" name="command" id="streamkey" placeholder="Stream key" onchange="streamkey_onchange()"></textarea>
 	    </div>
 	    </div>
 	   </div>
@@ -155,7 +68,7 @@
 	      <div class="col-md-4 inputGroupContainer">
 	      <div class="input-group">
 	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <input type="text" class="form-control" name="ip" placeholder="Default: 225.1.1.7:30120" value="{{ip}}">
+	            <input type="text" class="form-control" name="ip" id="ip" placeholder="Default: 225.1.1.7:30120" value="225.1.1.7:30120">
 	    </div>
 	    </div>
 	  </div>
