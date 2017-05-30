@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link href="/static/css/signin.css" rel="stylesheet">
     <script type="text/javascript" src="/static/main.js"></script>
+
     <style>
     body {
     padding-top: 60px;
@@ -26,7 +27,7 @@
         {% include 'nav.html' %}
       {% endblock %}
       <div>
-        <a href="#myModal" role="button" data-toggle="modal" class="btn btn-success btn-xs">Add new process <span class="glyphicon glyphicon-plus"></a>
+        <a href="#addModal" role="button" data-toggle="modal" class="btn btn-success btn-xs">Add new process <span class="glyphicon glyphicon-plus"></a>
       </div>
       <div class="table-responsive">
         <table class="table table-bordered table-hover table-striped">
@@ -45,17 +46,11 @@
               <td>{{'{{$index + 1}'}}}</td>
               <td>
                 <!--Facebook, youtube -->
-                <label ng-if="item.state === 0" class="label label-warning">Stop</label>
-                <label ng-if="item.state === 1" class="label label-success">Running</label>
-                <label ng-if="item.state === 2" class="label label-warning">Unknow</label>
-                <label ng-if="item.state === 3" class="label label-danger">Server has been stop!</label>
+                <label ng-if="item.state == 0 || item.state == 10" class="label label-warning">Stop</label>
+                <label ng-if="item.state == 1 || item.state == 11" class="label label-success">Running</label>
+                <label ng-if="item.state == 2 || item.state == 12" class="label label-warning">Unknow</label>
+                <label ng-if="item.state == 3 || item.state == 13" class="label label-danger">Server has been stop!</label>
                 <!--End Facebook, youtube -->
-                <!--RTMP -->
-                <label ng-if="item.state === 10" class="label label-warning">Stop</label>
-                <label ng-if="item.state === 11" class="label label-success">Running</label>
-                <label ng-if="item.state === 12" class="label label-warning">Unknow</label>
-                <label ng-if="item.state === 13" class="label label-danger">Server has been stop!</label>
-                <!--end RTMP -->
               </td>
               <td>{{'{{item.description}'}}}</td>
               <td>{{'{{item.name}'}}}</td>
@@ -83,7 +78,7 @@
         </div><!--end of .table-responsive-->
       </div>
       <!-- model add process -->
-      <div id="myModal" class="modal fade">
+      <div id="addModal" class="modal fade">
         <div class="modal-dialog">
           <div class="modal-content">
             <form class="well form-horizontal" action="/supvisor/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
