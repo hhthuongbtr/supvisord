@@ -15,78 +15,73 @@
 </head>
 
 <body ng-app="myApp" ng-controller="rtmpAddCtrl" onload="command()">
-  <div class="container">
-    <form class="well form-horizontal" action="/supvisor/rtmp/add/" method="post" name="form" onsubmit="return rtmp_SubmitCheckTextField(this);">
-        
-	<fieldset>
-
-	  <!-- Form Name -->
-	  <legend>
-		Add new RTMP streaming
-	  </legend>
-	  <!-- Name -->	
-	   
-	  <div class="form-group"> 
-	    <label class="col-md-4 control-label">Name</label>
-	      <div class="col-md-5 selectContainer">
-	      <div class="input-group">
-	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	          <input type="text" class="form-control" name="name" id="name" placeholder="Name of process" oninput="command()">
-	    </div>
-	  </div>
-	  </div>
-
-	  <!-- encode -->	    
-	  <div class="form-group">
-	    <label class="col-md-4 control-label">Encode</label>
-	      <div class="col-md-5 inputGroupContainer">
-	      <div class="input-group">
-	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <textarea class="form-control" name="encode" id="encode" placeholder="encode" rows="5" oninput="command()">{{'{{myData[0].encode}'}}}</textarea>
-	    </div>
-	    </div>
-	   </div>
-
-	  <!-- Domain -->	    
-	  <div class="form-group">
-	    <label class="col-md-4 control-label">Domain</label>
-	      <div class="col-md-5 inputGroupContainer">
-	      <div class="input-group">
-	          <span class="input-group-addon" id="basic-addon3">rtmp://</span>
-	          <textarea class="form-control" name="domain" id="domain" placeholder="example.com/stream key" rows="2" oninput="command()">{{'{{myData[0].domain}'}}}</textarea>
-	    </div>
-	    </div>
-	   </div>
-
-	  <!-- IP -->
-	  <div class="form-group">
-	    <label class="col-md-4 control-label">IP:Port</label>
-	      <div class="col-md-5 inputGroupContainer">
-	      <div class="input-group">
-	          <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-	            <input type="text" class="form-control" name="ip" id="ip" value="{{'{{myData[0].ip}'}}}" oninput="command()">
-	    </div>
-	    </div>
-	  </div>
-
-	  <!-- Button -->
-	  <div class="form-group">
-	    <label class="col-md-5 control-label"></label>
-	    <div class="col-md-4">
-	      <button type="submit" class="btn btn-success" name="saveAndStart">Save and Start <span class="glyphicon glyphicon-save"></span></button>
-	    </div>
-	  </div>
-		<div class="panel panel-info">
-		  <div class="panel-heading">
-			<h3 class="panel-title"><p id="program"></p></h3>
-		  </div>
-		  <div class="panel-body">
-			<p id="cmd"></p>
-		  </div>
-		</div>
-	  </fieldset>
-    </form>
-    </div>
+	<div class="container">
+		<form class="well form-horizontal" action="/supvisor/rtmp/add/" method="post" name="form" onsubmit="return rtmp_SubmitCheckTextField(this);">
+			
+			<fieldset>
+				<!-- Form Name -->
+				<legend>
+					Add new RTMP streaming
+				</legend>
+				<!-- Name -->
+				
+				<div class="form-group">
+					<label class="col-md-4 control-label">Name</label>
+					<div class="col-md-5 selectContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+							<input type="text" class="form-control" name="name" id="name" placeholder="Name of process" oninput="command()">
+						</div>
+					</div>
+				</div>
+				<!-- encode -->
+				<div class="form-group">
+					<label class="col-md-4 control-label">Encode</label>
+					<div class="col-md-5 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+							<textarea class="form-control" name="encode" id="encode" placeholder="encode" rows="5" oninput="command()">{{'{{myData[0].encode}'}}}</textarea>
+						</div>
+					</div>
+				</div>
+				<!-- Domain -->
+				<div class="form-group">
+					<label class="col-md-4 control-label">Domain</label>
+					<div class="col-md-5 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon3">rtmp://</span>
+							<textarea class="form-control" name="domain" id="domain" placeholder="example.com/stream key" rows="2" oninput="command()">{{'{{myData[0].domain}'}}}</textarea>
+						</div>
+					</div>
+				</div>
+				<!-- IP -->
+				<div class="form-group">
+					<label class="col-md-4 control-label">IP:Port</label>
+					<div class="col-md-5 inputGroupContainer">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+							<input type="text" class="form-control" name="ip" id="ip" value="{{'{{myData[0].ip}'}}}" oninput="command()">
+						</div>
+					</div>
+				</div>
+				<!-- Button -->
+				<div class="form-group">
+					<label class="col-md-5 control-label"></label>
+					<div class="col-md-4">
+						<button type="submit" class="btn btn-success" name="saveAndStart">Save and Start <span class="glyphicon glyphicon-save"></span></button>
+					</div>
+				</div>
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h3 class="panel-title"><p id="program"></p></h3>
+					</div>
+					<div class="panel-body">
+						<p id="cmd"></p>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 </body>
 <script>
 var app = angular.module('myApp',[]);

@@ -22,13 +22,12 @@
         }
     </style>
 </head>
-
 <body>
   <div class="container">
     {% block nav %}
-        {% include 'nav.html' %}
+      {% include 'nav.html' %}
     {% endblock %}
-     <div class="table-responsive">
+    <div class="table-responsive">
       <table class="table table-bordered table-hover table-striped">
         <thead>
           <tr>
@@ -40,18 +39,18 @@
         </thead>
         <tbody>
           {% for item in log_list %}
-          <tr>
-            <td>{{item.datetime}}</td>
-            <td>{{item.user}}</td>
-            <td>{{item.action}}</td>
-            <td>{{item.msg}}</td>
-          </tr>
+            <tr>
+              <td>{{item.datetime}}</td>
+              <td>{{item.user}}</td>
+              <td>{{item.action}}</td>
+              <td>{{item.msg}}</td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
-    </div><!--end of .table-responsive-->
-  </div>
-</body>
+      </div><!--end of .table-responsive-->
+    </div>
+  </body>
 <script>
     var tables = document.getElementsByTagName('table');
     var table = tables[tables.length -1];

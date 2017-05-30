@@ -130,15 +130,13 @@ def add_process(request):
 					Process(name).stop_job()
 				Process(name).update_job()
 				Process(name).start_job()
-				return HttpResponseRedirect('/supvisor/')
 			elif event == "Youtube":
 				Youtube(name).save(ip, streamkey)
 				if Process(name).get_job_status() == 1:
 					Process(name).stop_job()
 				Process(name).update_job()
 				Process(name).start_job()
-				return HttpResponseRedirect('/supvisor/')
-	return render_to_response('supvisor/add.html')
+	return HttpResponseRedirect('/supvisor/')
 
 def delete_process(request, name):
 	if not request.user.is_authenticated():
@@ -167,7 +165,7 @@ def rtmp_add_process(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	if not request.user.is_superuser:
-		return HttpResponseRedirect('/supvisor/add/')
+		return HttpResponseRedirect('/supvisor/')
 	if request.method == 'POST':
 		if 'saveAndStart' in request.POST:
 			#Get new infor from template

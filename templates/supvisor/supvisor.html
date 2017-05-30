@@ -1,110 +1,167 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Dashboard</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <script type="text/javascript" src="/static/angular.min.js"></script>
-
     <script type="text/javascript" src="/static/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="/static/bootstrap/js/bootstrap.min.js"></script>
-
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
     <link href="/static/css/signin.css" rel="stylesheet">
-
+    <script type="text/javascript" src="/static/main.js"></script>
     <style>
-        body {
-            padding-top: 60px;
-            padding-bottom: 60px;
-        }
+    body {
+    padding-top: 60px;
+    padding-bottom: 60px;
+    }
     </style>
-</head>
-
-<body ng-app="myApp" ng-controller="processCtrl">
-  <div class="container">
-    {% block nav %}
+  </head>
+  <body ng-app="myApp" ng-controller="processCtrl">
+    <div class="container">
+      {% block nav %}
         {% include 'nav.html' %}
-    {% endblock %}
-
-    <div>
-      <a class="btn btn-success btn-xs" href="/supvisor/add/">Add new process <span class="glyphicon glyphicon-plus"></a>
-    </div>
-
-     <div class="table-responsive">
-      <table class="table table-bordered table-hover table-striped">
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>State</th>
-            <th>Description</th>
-            <th>Name</th>
-            <th>Command</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="item in myData">
-            <td>{{'{{$index + 1}'}}}</td>
-            <td>
-            <!--Facebook, youtube -->
-            	<label ng-if="item.state === 0" class="label label-warning">Stop</label>
-            	<label ng-if="item.state === 1" class="label label-success">Running</label>
-            	<label ng-if="item.state === 2" class="label label-warning">Unknow</label>
-            	<label ng-if="item.state === 3" class="label label-danger">Server has been stop!</label>
-            <!--End Facebook, youtube -->
-            <!--RTMP -->
-              <label ng-if="item.state === 10" class="label label-warning">Stop</label>
-              <label ng-if="item.state === 11" class="label label-success">Running</label>
-              <label ng-if="item.state === 12" class="label label-warning">Unknow</label>
-              <label ng-if="item.state === 13" class="label label-danger">Server has been stop!</label>
-            <!--end RTMP -->
-            </td>
-            <td>{{'{{item.description}'}}}</td>
-            <td>{{'{{item.name}'}}}</td>
-            <td width="50%">
-            	{{'{{item.command}'}}}
-            </td>
-            <td>
-            <!--Facebook, youtube -->
-            	<a ng-if="item.state == 1 " class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/restart/">Restart</a>
-            	<a ng-if="item.state == 2 || item.state == 0" class="btn btn-success btn-xs" href="/supvisor/{{'{{item.name}'}}}/start/">Start</a>
-            	<a ng-if="item.state == 1 || item.state == 2" ng-hide="item.state == 2" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
-              <a ng-if="item.state == 0 || item.state == 2" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
-            <!--End Facebook, youtube -->
-            <!--RTMP -->
-              <a ng-if="item.state == 11 " class="btn btn-warning btn-xs" href="/supvisor/rtmp/restart/{{'{{item.name}'}}}/"">Restart</a>
-              <a ng-if="item.state == 12 || item.state == 10" class="btn btn-success btn-xs" href="/supvisor/rtmp/start/{{'{{item.name}'}}}/">Start</a>
-              <a ng-if="item.state == 11 || item.state == 12" ng-hide="item.state == 12" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
-              <a ng-if="item.state == 10 || item.state == 12" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
-            <!--End RTMP -->
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <span ng-hide="myData.length > 0">Please add new process!</span>
-    </div><!--end of .table-responsive-->
-  </div>
-</body>
-<script>
-var app = angular.module('myApp',[]);
-
-app.controller("processCtrl", function ($scope,$http,$timeout){
-
-  $scope.reload = function () {
+      {% endblock %}
+      <div>
+        <a href="#myModal" role="button" data-toggle="modal" class="btn btn-success btn-xs">Add new process <span class="glyphicon glyphicon-plus"></a>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>State</th>
+              <th>Description</th>
+              <th>Name</th>
+              <th>Command</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="item in myData">
+              <td>{{'{{$index + 1}'}}}</td>
+              <td>
+                <!--Facebook, youtube -->
+                <label ng-if="item.state === 0" class="label label-warning">Stop</label>
+                <label ng-if="item.state === 1" class="label label-success">Running</label>
+                <label ng-if="item.state === 2" class="label label-warning">Unknow</label>
+                <label ng-if="item.state === 3" class="label label-danger">Server has been stop!</label>
+                <!--End Facebook, youtube -->
+                <!--RTMP -->
+                <label ng-if="item.state === 10" class="label label-warning">Stop</label>
+                <label ng-if="item.state === 11" class="label label-success">Running</label>
+                <label ng-if="item.state === 12" class="label label-warning">Unknow</label>
+                <label ng-if="item.state === 13" class="label label-danger">Server has been stop!</label>
+                <!--end RTMP -->
+              </td>
+              <td>{{'{{item.description}'}}}</td>
+              <td>{{'{{item.name}'}}}</td>
+              <td width="50%">
+                {{'{{item.command}'}}}
+              </td>
+              <td>
+                <!--Facebook, youtube -->
+                <a ng-if="item.state == 1 " class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/restart/">Restart</a>
+                <a ng-if="item.state == 2 || item.state == 0" class="btn btn-success btn-xs" href="/supvisor/{{'{{item.name}'}}}/start/">Start</a>
+                <a ng-if="item.state == 1 || item.state == 2" ng-hide="item.state == 2" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+                <a ng-if="item.state == 0 || item.state == 2" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
+                <!--End Facebook, youtube -->
+                <!--RTMP -->
+                <a ng-if="item.state == 11 " class="btn btn-warning btn-xs" href="/supvisor/rtmp/restart/{{'{{item.name}'}}}/"">Restart</a>
+                <a ng-if="item.state == 12 || item.state == 10" class="btn btn-success btn-xs" href="/supvisor/rtmp/start/{{'{{item.name}'}}}/">Start</a>
+                <a ng-if="item.state == 11 || item.state == 12" ng-hide="item.state == 12" class="btn btn-warning btn-xs" href="/supvisor/{{'{{item.name}'}}}/stop/">Stop</a>
+                <a ng-if="item.state == 10 || item.state == 12" class="btn btn-danger btn-xs" href="/supvisor/{{'{{item.name}'}}}/delete/">Delete</a>
+                <!--End RTMP -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <span ng-hide="myData.length > 0">Please add new process!</span>
+        </div><!--end of .table-responsive-->
+      </div>
+      <!-- model add process -->
+      <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <form class="well form-horizontal" action="/supvisor/add/" method="post" name="form" onsubmit="return SubmitCheckTextField(this);">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Add new process</h4>
+              </div>
+              <div class="modal-body">
+                <!-- Event -->
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Stream type</label>
+                  <div class="col-md-9 selectContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
+                      <select name="event" id="event" class="form-control selectpicker" onchange="event_onchange()">
+                        <option selected="selected">Facebook</option>
+                        <option>Youtube</option>
+                        <option>RTMP</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!-- Name -->
+                
+                <div class="form-group">
+                  <label class="col-md-3 control-label">Name</label>
+                  <div class="col-md-9 selectContainer">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                      <input type="text" class="form-control" name="name" id="name" placeholder="Name of process">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <!-- Stream key -->
+              <div class="form-group">
+                <label class="col-md-3 control-label">Steam Key:</label>
+                <div class="col-md-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    <textarea class="form-control" name="command" id="streamkey" placeholder="Stream key"></textarea>
+                  </div>
+                </div>
+              </div>
+              <!-- IP -->
+              <div class="form-group">
+                <label class="col-md-3 control-label">IP:Port</label>
+                <div class="col-md-9 inputGroupContainer">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+                    <input type="text" class="form-control" name="ip" id="ip" placeholder="Default: 225.1.1.7:30120" value="225.1.1.7:30120">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success" name="saveAndStart">Save and Start <span class="glyphicon glyphicon-save"></span></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- End model add process -->
+    </body>
+    <script>
+    var app = angular.module('myApp',[]);
+    app.controller("processCtrl", function ($scope,$http,$timeout){
+    $scope.reload = function () {
     $http.get('/supvisor/json/').
-        then(function (response) {
-            $scope.myData = response.data.process;
-            console.log($scope.myData);
-      });
-
+    then(function (response) {
+    $scope.myData = response.data.process;
+    console.log($scope.myData);
+    });
     $timeout(function(){
-      $scope.reload();
+    $scope.reload();
     },10000)
-  };
-  $scope.reload();
-});
-</script>
-</html>
+    };
+    $scope.reload();
+    });
+    </script>
+  </html>
