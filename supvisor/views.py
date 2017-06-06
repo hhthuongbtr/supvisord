@@ -143,6 +143,8 @@ def add_process(request):
 				Facebook(name).save(ip, streamkey)
 			elif event == "Youtube":
 				Youtube(name).save(ip, streamkey)
+			Process(name).update_job()
+			Process(name).stop_job()
 	return HttpResponseRedirect('/supvisor/')
 
 def delete_process(request, name):
@@ -198,6 +200,8 @@ def rtmp_add_process(request):
 			write_log(request.user.username,"start", msg)
 		elif 'saveOnly' in request.POST:
 			RTMP(name).save(ip, encode, domain)
+			Process(name).update_job()
+			Process(name).stop_job()
 		return HttpResponseRedirect('/supvisor/')
 	return render_to_response('supvisor/rtmp/add.html')
 
