@@ -108,22 +108,24 @@ def add_process(request):
 	if not request.user.is_authenticated():
 		return HttpResponseRedirect('/accounts/login')
 	if request.method == 'POST':
+		#Get new infor from template
+		streamkey = request.POST.get('command', '').strip()
+		ip = request.POST.get('ip', '').strip()
+		#Return deffault ip if new ip is none
+		if not ip:
+			ip = '225.1.1.7:30120'
+		event = request.POST.get('event', '').strip()
+		name = request.POST.get('name', '').strip()
+		#Cut white space
+		name = name.replace(" ", "")
+		#add user name to file name
+		name = request.user.username + '_'+name
+		#End get new infor from template
+		msg= " user: "+request.user.username+" add process "+name 
+		write_log(request.user.username,"add", msg)
 		if 'saveAndStart' in request.POST:
-			#Get new infor from template
-			streamkey = request.POST.get('command', '').strip()
-			ip = request.POST.get('ip', '').strip()
-			#Return deffault ip if new ip is none
-			if not ip:
-				ip = '225.1.1.7:30120'
-			event = request.POST.get('event', '').strip()
-			name = request.POST.get('name', '').strip()
-			#Cut white space
-			name = name.replace(" ", "")
-			#add user name to file name
-			name = request.user.username + '_'+name
-			#End get new infor from template
-			msg= " user: "+request.user.username+" add process "+name 
-			write_log(request.user.username,"add", msg)
+			msg= " user: "+request.user.username+" start process "+name 
+			write_log(request.user.username,"start", msg)
 			if event == "Facebook":
 				Facebook(name).save(ip, streamkey)
 				if Process(name).get_job_status() == 1:
@@ -136,6 +138,11 @@ def add_process(request):
 					Process(name).stop_job()
 				Process(name).update_job()
 				Process(name).start_job()
+		elif 'saveOnly' in request.POST:
+			if event == "Facebook":
+				Facebook(name).save(ip, streamkey)
+			elif event == "Youtube":
+				Youtube(name).save(ip, streamkey)
 	return HttpResponseRedirect('/supvisor/')
 
 def delete_process(request, name):
@@ -167,27 +174,31 @@ def rtmp_add_process(request):
 	if not request.user.is_superuser:
 		return HttpResponseRedirect('/supvisor/')
 	if request.method == 'POST':
+		#Get new infor from template
+		domain = request.POST.get('domain', '').strip()
+		if domain.startswith("rtmp://"):
+			domain = domain.replace("rtmp://","")
+		ip = request.POST.get('ip', '').strip()
+		name = request.POST.get('name', '').strip()
+		#Cut white space
+		name = name.replace(" ", "")
+		#add user name to file name
+		name = 'rtmp_'+name
+		encode = request.POST.get('encode', '').strip()
+		#End get new infor from template
+		msg= " user: "+request.user.username+" add process "+name 
+		write_log(request.user.username,"add", msg)
 		if 'saveAndStart' in request.POST:
-			#Get new infor from template
-			domain = request.POST.get('domain', '').strip()
-			if domain.startswith("rtmp://"):
-				domain = domain.replace("rtmp://","")
-			ip = request.POST.get('ip', '').strip()
-			name = request.POST.get('name', '').strip()
-			#Cut white space
-			name = name.replace(" ", "")
-			#add user name to file name
-			name = 'rtmp_'+name
-			encode = request.POST.get('encode', '').strip()
-			#End get new infor from template
 			RTMP(name).save(ip, encode, domain)
 			if Process(name).get_job_status() == 1:
 				Process(name).stop_job()
 			Process(name).update_job()
 			Process(name).start_job()
-			msg= " user: "+request.user.username+" add process "+name 
-			write_log(request.user.username,"add", msg)
-			return HttpResponseRedirect('/supvisor/')
+			msg= " user: "+request.user.username+" start process "+name 
+			write_log(request.user.username,"start", msg)
+		elif 'saveOnly' in request.POST:
+			RTMP(name).save(ip, encode, domain)
+		return HttpResponseRedirect('/supvisor/')
 	return render_to_response('supvisor/rtmp/add.html')
 
 def rtmp_add_json(request):
