@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Edit info</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap-theme.min.css">
+		<link href="/static/css/signin.css" rel="stylesheet">
+		<script type="text/javascript" src="/static/main.js"></script>
+	</head>
+	<body ng-app="myApp" ng-controller="rtmpAddCtrl">
+		<div class="container">
+			<form class="well form-horizontal" action="/supvisor/rtmp/edit/{{name}}/" method="post" name="form" onsubmit="return rtmp_start_SubmitCheckTextField(this);">
+				{% csrf_token %}
+				<fieldset>
+					<!-- Form Name -->
+					<legend>
+						{{name}}
+					</legend>
+					<!-- encode -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Encode</label>
+						<div class="col-md-5 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+								<textarea class="form-control" name="encode" id="encode" placeholder="encode" rows="5"> {{encode}} </textarea>
+							</div>
+						</div>
+					</div>
+					<!-- Source -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Source</label>
+						<div class="col-md-5 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+								<input type="text" class="form-control" name="ip" id="ip" value="{{ip}}">
+							</div>
+						</div>
+					</div>
+					<!-- Destination -->
+					<div class="form-group">
+						<label class="col-md-4 control-label">Destination</label>
+						<div class="col-md-5 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+								<textarea class="form-control" name="domain" id="domain" placeholder="example.com/stream key" rows="2">{{domain}}</textarea>
+							</div>
+						</div>
+					</div>
+					<!-- Button -->
+					<div class="form-group">
+						<label class="col-md-5 control-label"></label>
+						<div class="col-md-4">
+							<button type="submit" class="btn btn-success" name="saveAndStart">Save and Start <span class="glyphicon glyphicon-save"></span></button>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
+	</body>
+</html>
