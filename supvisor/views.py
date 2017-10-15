@@ -118,7 +118,7 @@ def start_job(request, name):
                                      "opdate"     : opdate,
                                      "cldate"     : cldate
                                  }
-            logger.Warning(json.dumps(rslog))
+            logger.warning(json.dumps(rslog))
             return HttpResponseRedirect('/supvisor/')
     return render_to_response('supvisor/start.html', args)  
 
@@ -143,7 +143,7 @@ def stop_job(request, name):
                                  "opdate"     : opdate,
                                  "cldate"     : cldate
                              }
-        logger.Warning(json.dumps(rslog))
+        logger.warning(json.dumps(rslog))
     return HttpResponseRedirect('/supvisor/')
 
 @csrf_exempt
@@ -195,7 +195,7 @@ def add_process(request):
                                      "opdate"     : opdate,
                                      "cldate"     : cldate
                                  }
-            logger.Warning(json.dumps(rslog))
+            logger.warning(json.dumps(rslog))
         elif 'saveOnly' in request.POST:
             if event == "Facebook":
                 Facebook(name).save(ip, streamkey)
@@ -232,7 +232,7 @@ def delete_process(request, name):
                                  "opdate"     : opdate,
                                  "cldate"     : cldate
                              }
-        logger.Warning(json.dumps(rslog))
+        logger.warning(json.dumps(rslog))
     return HttpResponseRedirect('/supvisor/')
 
 def document(request):
@@ -291,7 +291,7 @@ def rtmp_add_process(request):
                                      "opdate"     : opdate,
                                      "cldate"     : cldate
                                  }
-            logger.Warning(json.dumps(rslog))
+            logger.warning(json.dumps(rslog))
         elif 'saveOnly' in request.POST:
             '''Save command'''
             rtmp_pattern=re.compile("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\:30120")
@@ -324,9 +324,9 @@ def rtmp_add_json(request):
 def rtmp_start_job(request, name):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login')
-    date_time = DateTime()
-    opdate = date_time.get_now()
     else:
+        date_time = DateTime()
+        opdate = date_time.get_now()
         Process(name).update_job()
         Process(name).start_job()
         msg= " user: "+request.user.username+" start process "+name 
@@ -343,16 +343,16 @@ def rtmp_start_job(request, name):
                                  "opdate"     : opdate,
                                  "cldate"     : cldate
                              }
-        logger.Warning(json.dumps(rslog))
+        logger.warning(json.dumps(rslog))
     return HttpResponseRedirect('/supvisor/')
 
 @csrf_exempt
 def rtmp_restart_job(request, name):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/accounts/login')
-    date_time = DateTime()
-    opdate = date_time.get_now()
     else:
+        date_time = DateTime()
+        opdate = date_time.get_now()
         if Process(name).get_job_status() == 1:
             Process(name).stop_job()
         Process(name).update_job()
@@ -371,7 +371,7 @@ def rtmp_restart_job(request, name):
                                  "opdate"     : opdate,
                                  "cldate"     : cldate
                              }
-        logger.Warning(json.dumps(rslog))
+        logger.warning(json.dumps(rslog))
     return HttpResponseRedirect('/supvisor/')
 
 @csrf_exempt
@@ -420,7 +420,7 @@ def rtmp_edit_job(request, name):
                                      "opdate"     : opdate,
                                      "cldate"     : cldate
                                  }
-            logger.Warning(json.dumps(rslog))
+            logger.warning(json.dumps(rslog))
         return HttpResponseRedirect('/supvisor/')
     else:
         user = user_info(request)

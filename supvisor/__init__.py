@@ -3,7 +3,6 @@ import logging
 import logging.config
 import logging.handlers
 import json
-from config.config import LOGGING as logging_config_dict
 
 # Create the Logger
 logger = logging.getLogger(__name__)
