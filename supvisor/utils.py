@@ -395,11 +395,10 @@ class DateTime:
 
     def get_now(self):
         now = time.time()
-        now = now * 1000
         now_pattern = re.compile("\d+") 
         now = re.findall(now_pattern, str(now))
-        now = now[0] + now[1]
-        return long(now)
+        now = now[0]
+        return now
 
     def convert_date_pattern_2_unix_timestamp(self, ss, mm, hh, DD, MM, YYYY):
         human_date = "%s-%s-%s %s:%s:%s"%(YYYY,MM,DD,hh,mm,ss)
